@@ -24,22 +24,19 @@
 
 extern int debug;
 
-
 /*****************************************************************
 //
-//  Function name: add
+//  Function name: addRecord
 //
 //  DESCRIPTION:   Adds a record to the database.
 //                 
-//                 
-//  Parameters:    record (**record) : 
-//                 uaccountno (int)  : User account number.
+//  Parameters:    record (**record) : The address of the pointer to the starting record.
+//                 uaccountno (int)  : The account to add a record to.
 //                 uname (char[])    : Name to be added to record.
 //                 uaddress (char[]) : Address to be added to record.
 //
 //  Return values: None.
 //              
-//
 ****************************************************************/
 
 void addRecord(struct record **record, int uaccountno, char uname[], char uaddress[])
@@ -73,12 +70,10 @@ void addRecord(struct record **record, int uaccountno, char uname[], char uaddre
 //
 //  DESCRIPTION:   Prints all records in the database.
 //                 
-//                 
-//  Parameters: record (*record) :
+//  Parameters: record (*record) : A pointer to the first record.
 //            
 //  Return values: None.
 //              
-//
 ****************************************************************/
 void printAllRecords(struct record *record)
 {
@@ -103,15 +98,13 @@ void printAllRecords(struct record *record)
 //
 //  Function name: findRecord
 //
-//  DESCRIPTION:   Finds a record.
+//  DESCRIPTION:   Finds all records matching a provided account no.
 //                 
-//                 
-//  Parameters: record (*record) :
-//              uaccountno (int) : User account number.
+//  Parameters: record (*record) : A pointer to first record.
+//              uaccountno (int) : Account no. of record(s) to find.
 //            
-//  Return values: None.
+//  Return values: 0 if a record is found, -1 if not.
 //              
-//
 ****************************************************************/
 
 int findRecord (struct record *record, int uaccountno)
@@ -142,13 +135,12 @@ int findRecord (struct record *record, int uaccountno)
 //
 //  Function name: deleteRecord
 //
-//  DESCRIPTION: Deletes a record
-//    
+//  DESCRIPTION: Deletes all records matching a provided account no.
 //                 
-//  Parameters: record (**record) :
-//              uaccountno (int)  : User account number.
+//  Parameters: record (**record) : Starting record.
+//              uaccountno (int)  : Account no. of record(s) to delete.
 //            
-//  Return values: None.
+//  Return values: 0 if record was deleted, -1 if not.
 //              
 //
 ****************************************************************/
