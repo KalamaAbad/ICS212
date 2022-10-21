@@ -24,6 +24,7 @@
 
 extern int debug;
 
+
 /*****************************************************************
 //
 //  Function name: add
@@ -41,47 +42,29 @@ extern int debug;
 //
 ****************************************************************/
 
-void add(struct record **record, int uaccountno, char uname[], char uaddress[])
+void addRecord(struct record **record, int uaccountno, char uname[], char uaddress[])
 {
-    
-
-    struct record *temp;
-    struct record *newNode;
+    struct record *temp, *newNode;
     temp = *record;
     newNode = (struct record*)malloc(sizeof(struct record));
     newNode->accountno = uaccountno;
     strcpy(newNode->name, uname);
     strcpy(newNode->address, uaddress);
     newNode->next = NULL;
-
-    if (debug == 1)
-    {
-        printf("%s", "\nDebug mode activated\n");
-        printf("%s", "Function name: add\n");
-        printf("Account number to add: %d\n", uaccountno);
-        printf("Name of user: %s\n", uname);
-        printf("Address of user: %s\n", uaddress);
-        printf("\n");
-    }
-
     if (temp == NULL || temp->accountno < newNode->accountno)
     {
         newNode->next = temp;
         *record = newNode;
     }
-
     else
     {
         while (temp->next != NULL && temp->next->accountno > newNode->accountno)
         {
             temp = temp->next;
         }
-
         newNode->next = temp->next;
         temp->next = newNode;
-
     }
-
 }
 
 /*****************************************************************
@@ -101,19 +84,11 @@ void printAllRecords(struct record *record)
 {
     struct record *current;
     current = record;
-
-    if (debug == 1)
-    {
-        printf("%s", "\nDebug mode activated\n");
-        printf("%s", "Function name: printAllRecords\n\n");
-        printf("\n");
-    }
-
+    printf("\n========== Current Database ==========\n");
     if (current == NULL)
     {
-        printf("No records in database.\n");
+        printf("\nNo records in database.\n");
     }
-
     while (current != NULL)
     {
         printf("\nAccount #: %d\n", current->accountno);
@@ -121,7 +96,7 @@ void printAllRecords(struct record *record)
 	    printf("Address: %s\n", current->address);
         current = current->next;
     }
-
+    printf("\n================ End =================\n");
 }
 
 /*****************************************************************
@@ -141,13 +116,26 @@ void printAllRecords(struct record *record)
 
 int findRecord (struct record *record, int uaccountno)
 {
-    if (debug == 1)
+    struct record *temp;
+    int found;
+    temp = record;
+    found = -1;
+    while (temp != NULL && temp->accountno != uaccountno)
     {
-        printf("%s", "\nDebug mode activated\n");
-        printf("%s", "Function name: findRecord\n");
-        printf("Account number to find: %d\n\n", uaccountno);        
+        temp = temp->next;
     }
-    return 0;
+    if (temp != NULL && temp->accountno == uaccountno)
+    {
+        found = 0;
+    }
+    while (temp != NULL && temp->accountno == uaccountno)
+    {
+        printf("\nAccount #: %d\n", temp->accountno);
+	    printf("Name: %s\n", temp->name);
+	    printf("Address: %s\n", temp->address);
+        temp = temp->next;
+    }
+    return found;
 }
 
 /*****************************************************************
@@ -167,20 +155,10 @@ int findRecord (struct record *record, int uaccountno)
 
 int deleteRecord(struct record **record, int uaccountno)
 {
-    struct record *deleteMe;
-    struct record *current;
-    struct record *prev;
+    struct record *deleteMe, *current, *prev;
     int deleted;
-
     current = *record;
     deleted = -1;
-
-    if (!current)
-    {
-        printf("\nEmpty.\n");
-        return -1;
-    }
-
     if (current->accountno == uaccountno)
     {
         while (current != NULL && current->accountno == uaccountno)
@@ -204,6 +182,7 @@ int deleteRecord(struct record **record, int uaccountno)
                 prev->next = current->next;
                 current = current->next;
                 free(deleteMe);
+                deleted = 0;
             }
             else
             {
@@ -212,9 +191,5 @@ int deleteRecord(struct record **record, int uaccountno)
             }
         }
     }
-
-    return 0;
-
-
-
+    return deleted;
 }
