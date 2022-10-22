@@ -13,7 +13,7 @@
 //  FILE:        database.h
 //
 //  DESCRIPTION:
-//   This file Contains a structure for a database.
+//   This file contains functions for a database.
 //
 ****************************************************************/
 #include "record.h"
@@ -21,3 +21,6 @@
     void printAllRecords(struct record *);
     int findRecord (struct record *, int);
     int deleteRecord(struct record **, int);
+    int writefile(struct record *, char []);
+    int readfile(struct record **, char []);
+    void cleanup(struct record **);
