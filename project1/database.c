@@ -185,3 +185,63 @@ int deleteRecord(struct record **record, int uaccountno)
     }
     return deleted;
 }
+
+/*****************************************************************
+//
+//  Function name: writefile
+//
+//  DESCRIPTION:   Writes bank data to a text file.
+//                 
+//  Parameters: record (*record) : Starting record.
+//              filename (char [])  : Name of file to write to.
+//                                                 
+//  Return values: If the function could successfully open the file: return 0
+//                 Otherwise, return -1     
+//
+****************************************************************/
+
+int writefile(struct record *record, char filename[])
+{
+    FILE *f;
+    struct record *current;
+    current = record;
+    f = fopen(filename, "w");
+    if (f == NULL || current == NULL)
+    {
+        return -1;
+    }
+    else
+    {
+        while (current != NULL)
+        {
+        fprintf(f, "$%d$", current->accountno);
+	    fprintf(f, "$%s$", current->name);
+	    fprintf(f, "$%s$", current->address);
+        current = current->next;
+        }
+        return 0;
+    }
+
+
+}
+
+/*****************************************************************
+//
+//  Function name: readfile
+//
+//  DESCRIPTION:   Reads bank data from a text file.             
+//
+//  Parameters: record (*record) : Starting record.
+//              filename (char [])  : Name of file to read from. 
+//
+//  Return values: If the function could successfully open the file: return 0
+//                 Otherwise, return -1
+//              
+****************************************************************/
+
+int readfile(struct record *record, char filename[])
+{
+    return 0;
+}
+
+
