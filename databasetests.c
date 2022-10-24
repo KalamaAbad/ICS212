@@ -47,6 +47,7 @@ int main(int argc, char const *argv[])
     */
 
     /*Add 10 records.*/
+    printf("hellolollo");
     readfile(&start, "test.txt");
     printAllRecords(start);
     printf("\n================== Testing addRecord ==================\n" );
@@ -331,28 +332,24 @@ int writefile(struct record *record, char filename[])
 int readfile(struct record **record, char filename[])
 {
     int accnum;
-    char string[100];
-    char name[30];
-    char address[50];
-    char *s;
-    FILE *f;
+        FILE *f;
+
+    accnum = 0;
+  
 
     f = fopen("test.txt", "r");
     if (f == NULL)
     {
+        printf("here");
         return -1;
     }
     else
     {
-        while (feof(f))
+        while (!feof(f))
         {
-            // get integer store in var
-            // getChar to read delimiter
-            // get 30 chars
-            // getChar to read delimiter
-            // get 50 chars
-            // read delimiter
-            // addRecord
+            fscanf(f, "%d", &accnum);
+            printf("%d", accnum);
+
         }
         return 0;
     }
