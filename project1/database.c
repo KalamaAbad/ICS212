@@ -214,9 +214,9 @@ int writefile(struct record *record, char filename[])
     {
         while (current != NULL)
         {
-        fprintf(f, "$%d$", current->accountno);
-	    fprintf(f, "$%s$", current->name);
-	    fprintf(f, "$%s$", current->address);
+        fprintf(f, "|%d|", current->accountno);
+	    fprintf(f, "|%s|", current->name);
+	    fprintf(f, "|%s|", current->address);
         current = current->next;
         }
         return 0;
@@ -241,7 +241,27 @@ int writefile(struct record *record, char filename[])
 
 int readfile(struct record *record, char filename[])
 {
+    char string[100];
+    FILE *f;
+    struct record *current;
+    current = record;
+    f = fopen(filename, "r");
+    if (f == NULL || current == NULL)
+    {
+        return -1;
+    }
+    else
+    {
+        while (!feof(f))
+        {
+            fgets(string, 100, f);
+            printf("\n%s", line);
+
+        }
+        return 0;
+    }
     return 0;
+
 }
 
 
