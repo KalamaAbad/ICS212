@@ -307,6 +307,7 @@ int writefile(struct record *record, char filename[])
 	    fprintf(f, "%s|", current->address);
         current = current->next;
         }
+        fclose(f);
         return 0;
     }
 
@@ -404,6 +405,9 @@ int readfile(struct record **record, char filename[])
             if (!feof(f))
             {
             addRecord(record, accnum, name, address);
+            memset(name, 0, sizeof(name));
+            memset(address, 0, sizeof(address));
+            memset(num, 0, sizeof(num));
             }
             else
             {
@@ -413,6 +417,7 @@ int readfile(struct record **record, char filename[])
             }
 
         }
+        fclose(f);
         return 0;
     }
 }
