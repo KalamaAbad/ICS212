@@ -45,9 +45,9 @@ int main(int argc, char const *argv[])
     printAllRecords(start);
     deleteRecord(&start, numInput);
     */
-
     readfile(&start, "test.txt");
     printAllRecords(start);
+
     printf("\n================== Testing addRecord ==================\n" );
     printf("\nAdding 5 records.\n");
     for (i = 0; i < 5; i++)
@@ -339,7 +339,8 @@ int readfile(struct record **record, char filename[])
     FILE *f;
 
     accnum = 0;
-  
+    
+    printf("hello");
 
     f = fopen("test.txt", "r");
     if (f == NULL)
@@ -400,15 +401,20 @@ int readfile(struct record **record, char filename[])
                 }
                 i++;
             }
+            if (!feof(f))
+            {
             addRecord(record, accnum, name, address);
+            }
+            else
+            {
             memset(name, 0, sizeof(name));
             memset(address, 0, sizeof(address));
             memset(num, 0, sizeof(num));
-
+            }
 
         }
+        return 0;
     }
-    return 0;
 }
 
 
