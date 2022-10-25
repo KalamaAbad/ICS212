@@ -46,8 +46,6 @@ int main(int argc, char const *argv[])
     deleteRecord(&start, numInput);
     */
 
-    /*Add 10 records.*/
-    printf("hellolollo");
     readfile(&start, "test.txt");
     printAllRecords(start);
     printf("\n================== Testing addRecord ==================\n" );
@@ -331,8 +329,14 @@ int writefile(struct record *record, char filename[])
 
 int readfile(struct record **record, char filename[])
 {
+    int terminate;
+    int i;
     int accnum;
-        FILE *f;
+    char ch;
+    char num[10];
+    char name[30];
+    char address[200];
+    FILE *f;
 
     accnum = 0;
   
@@ -347,14 +351,64 @@ int readfile(struct record **record, char filename[])
     {
         while (!feof(f))
         {
-            fscanf(f, "%d", &accnum);
-            printf("%d", accnum);
+            i = 0;
+            terminate = 0;
+            while (i < 10 && terminate == 0) 
+            {
+                ch = fgetc(f);
+                if (ch == '|')
+                {
+                    terminate = 1;
+                }
+                else
+                {
+                    num[i] = ch;
+                }
+                i++;
+            }
+            accnum = atoi(num);
+
+            i = 0;
+            terminate = 0;
+
+            while (i < 30 && terminate == 0)
+            {
+                ch = fgetc(f);
+                if (ch == '|')
+                {
+                    terminate = 1;
+                }
+                else
+                {
+                    name[i] = ch;
+                }
+                i++;               
+            }
+            i = 0;
+            terminate = 0;
+
+            while (i < 200 && terminate == 0)
+            {
+                ch = fgetc(f);
+                if (ch == '|')
+                {
+                    terminate = 1;
+                }
+                else
+                {
+                    address[i] = ch;
+                }
+                i++;
+            }
+            addRecord(record, accnum, name, address);
+            memset(name, 0, sizeof(name));
+            memset(address, 0, sizeof(address));
+            memset(num, 0, sizeof(num));
+
 
         }
-        return 0;
     }
     return 0;
-
 }
 
 
