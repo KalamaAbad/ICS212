@@ -26,17 +26,19 @@ extern int debug;
 
 /*****************************************************************
 //
-//  Function name: addRecord
+//  Function name: add
 //
 //  DESCRIPTION:   Adds a record to the database.
 //                 
-//  Parameters:    record (**record) : The address of the pointer to the starting record.
-//                 uaccountno (int)  : The account to add a record to.
+//                 
+//  Parameters:    record (**record) : The address of the starting pointer.
+//                 uaccountno (int)  : User account number.
 //                 uname (char[])    : Name to be added to record.
 //                 uaddress (char[]) : Address to be added to record.
 //
 //  Return values: None.
 //              
+//
 ****************************************************************/
 
 void addRecord(struct record **record, int uaccountno, char uname[], char uaddress[])
@@ -68,12 +70,12 @@ void addRecord(struct record **record, int uaccountno, char uname[], char uaddre
 //
 //  Function name: printAllRecords
 //
-//  DESCRIPTION:   Prints all records in the database.
+//  DESCRIPTION:   Prints all records in the database.  
 //                 
-//  Parameters: record (*record) : A pointer to the first record.
+//  Parameters: record (*record) : The first record in the database.
 //            
-//  Return values: None.
-//              
+//  Return values: None.           
+//
 ****************************************************************/
 void printAllRecords(struct record *record)
 {
@@ -98,13 +100,13 @@ void printAllRecords(struct record *record)
 //
 //  Function name: findRecord
 //
-//  DESCRIPTION:   Finds all records matching a provided account no.
+//  DESCRIPTION:   Finds a record.
 //                 
-//  Parameters: record (*record) : A pointer to first record.
-//              uaccountno (int) : Account no. of record(s) to find.
+//  Parameters: record (*record) : The first record in the database.
+//              uaccountno (int) : User account number to add a record to.
 //            
-//  Return values: 0 if a record is found, -1 if not.
-//              
+//  Return values: 0 if an account was found, -1 if not.        
+//
 ****************************************************************/
 
 int findRecord (struct record *record, int uaccountno)
@@ -135,12 +137,13 @@ int findRecord (struct record *record, int uaccountno)
 //
 //  Function name: deleteRecord
 //
-//  DESCRIPTION: Deletes all records matching a provided account no.
+//  DESCRIPTION: Deletes a record
+//    
 //                 
-//  Parameters: record (**record) : Starting record.
-//              uaccountno (int)  : Account no. of record(s) to delete.
+//  Parameters: record (**record) : The address of the starting record pointer.
+//              uaccountno (int)  : User account number to delete records from.
 //            
-//  Return values: 0 if record was deleted, -1 if not.
+//  Return values: None.
 //              
 //
 ****************************************************************/
@@ -192,7 +195,7 @@ int deleteRecord(struct record **record, int uaccountno)
 //
 //  DESCRIPTION:   Writes bank data to a text file.
 //                 
-//  Parameters: record (*record) : Starting record.
+//  Parameters: record (*record) : The starting record.
 //              filename (char [])  : Name of file to write to.
 //                                                 
 //  Return values: If the function could successfully open the file: return 0
@@ -214,11 +217,12 @@ int writefile(struct record *record, char filename[])
     {
         while (current != NULL)
         {
-        fprintf(f, "|%d|", current->accountno);
-	    fprintf(f, "|%s|", current->name);
-	    fprintf(f, "|%s|", current->address);
+        fprintf(f, "%d|", current->accountno);
+	    fprintf(f, "%s|", current->name);
+	    fprintf(f, "%s|", current->address);
         current = current->next;
         }
+        fclose(f);
         return 0;
     }
 
@@ -229,9 +233,9 @@ int writefile(struct record *record, char filename[])
 //
 //  Function name: readfile
 //
-//  DESCRIPTION:   Reads bank data from a text file.             
+//  DESCRIPTION:   Reads bank accounts from a text file into database.          
 //
-//  Parameters: record (*record) : Starting record.
+//  Parameters: record (*record) : The starting record.
 //              filename (char [])  : Name of file to read from. 
 //
 //  Return values: If the function could successfully open the file: return 0
@@ -239,29 +243,117 @@ int writefile(struct record *record, char filename[])
 //              
 ****************************************************************/
 
-int readfile(struct record *record, char filename[])
+int readfile(struct record **record, char filename[])
 {
-    char string[100];
+    char ch;
+    int terminate;
+    int i;
+    int accnum;
+    char num[10];
+    char name[30];
+    char address[200];
     FILE *f;
-    struct record *current;
-    current = record;
-    f = fopen(filename, "r");
-    if (f == NULL || current == NULL)
+
+    accnum = 0;
+    
+    printf("hello");
+
+    f = fopen("test.txt", "r");
+    if (f == NULL)
     {
+        printf("here");
         return -1;
     }
     else
     {
         while (!feof(f))
         {
-            fgets(string, 100, f);
-            printf("\n%s", line);
-
+            i = 0;
+            terminate = 0;
+            while (i < 10 && terminate == 0) 
+            {
+                ch = fgetc(f);
+                if (ch == '|')
+                {
+                    terminate = 1;
+                }
+                else
+                {
+                    num[i] = ch;
+                }
+                i++;
+            }
+            accnum = atoi(num);
+            i = 0;
+            terminate = 0;
+            while (i < 30 && terminate == 0)
+            {
+                ch = fgetc(f);
+                if (ch == '|')
+                {
+                    terminate = 1;
+                }
+                else
+                {
+                    name[i] = ch;
+                }
+                i++;               
+            }
+            i = 0;
+            terminate = 0;
+            while (i < 200 && terminate == 0)
+            {
+                ch = fgetc(f);
+                if (ch == '|')
+                {
+                    terminate = 1;
+                }
+                else
+                {
+                    address[i] = ch;
+                }
+                i++;
+            }
+            if (!feof(f))
+            {
+            addRecord(record, accnum, name, address);
+            memset(name, 0, sizeof(name));
+            memset(address, 0, sizeof(address));
+            memset(num, 0, sizeof(num));
+            }
+            else
+            {
+            memset(name, 0, sizeof(name));
+            memset(address, 0, sizeof(address));
+            memset(num, 0, sizeof(num));
+            }
         }
+        fclose(f);
         return 0;
     }
-    return 0;
-
 }
 
+/*****************************************************************
+//
+//  Function name: cleanup
+//
+//  DESCRIPTION:   Deletes all accounts.        
+//
+//  Parameters: record (**record) : The address of the starting pointer.
+//
+//  Return values: None.
+//              
+****************************************************************/
 
+void cleanup(struct record **record)
+{
+    struct record *current, *previous;
+    struct record *current = *record;
+    while (current != NULL)
+    {
+        previous = current;
+        current = current->next;
+        free(previous);
+    }
+    *record = current;
+}

@@ -39,12 +39,7 @@ int main(int argc, char const *argv[])
 {
     int i;
     struct record *start = NULL;
-    /*
-    addRecord(&start, recordNum, name, address);
-    findRecord(start, numInput);
-    printAllRecords(start);
-    deleteRecord(&start, numInput);
-    */
+
     readfile(&start, "test.txt");
     printAllRecords(start);
 
@@ -111,7 +106,7 @@ int main(int argc, char const *argv[])
 //  DESCRIPTION:   Adds a record to the database.
 //                 
 //                 
-//  Parameters:    record (**record) : 
+//  Parameters:    record (**record) : The address of the starting pointer.
 //                 uaccountno (int)  : User account number.
 //                 uname (char[])    : Name to be added to record.
 //                 uaddress (char[]) : Address to be added to record.
@@ -150,13 +145,11 @@ void addRecord(struct record **record, int uaccountno, char uname[], char uaddre
 //
 //  Function name: printAllRecords
 //
-//  DESCRIPTION:   Prints all records in the database.
+//  DESCRIPTION:   Prints all records in the database.  
 //                 
-//                 
-//  Parameters: record (*record) :
+//  Parameters: record (*record) : The first record in the database.
 //            
-//  Return values: None.
-//              
+//  Return values: None.           
 //
 ****************************************************************/
 void printAllRecords(struct record *record)
@@ -184,12 +177,10 @@ void printAllRecords(struct record *record)
 //
 //  DESCRIPTION:   Finds a record.
 //                 
-//                 
-//  Parameters: record (*record) :
-//              uaccountno (int) : User account number.
+//  Parameters: record (*record) : The first record in the database.
+//              uaccountno (int) : User account number to add a record to.
 //            
-//  Return values: None.
-//              
+//  Return values: 0 if an account was found, -1 if not.        
 //
 ****************************************************************/
 
@@ -224,8 +215,8 @@ int findRecord (struct record *record, int uaccountno)
 //  DESCRIPTION: Deletes a record
 //    
 //                 
-//  Parameters: record (**record) :
-//              uaccountno (int)  : User account number.
+//  Parameters: record (**record) : The address of the starting record pointer.
+//              uaccountno (int)  : User account number to delete records from.
 //            
 //  Return values: None.
 //              
@@ -273,14 +264,13 @@ int deleteRecord(struct record **record, int uaccountno)
     return deleted;
 }
 
-
 /*****************************************************************
 //
 //  Function name: writefile
 //
 //  DESCRIPTION:   Writes bank data to a text file.
 //                 
-//  Parameters: record (*record) : Starting record.
+//  Parameters: record (*record) : The starting record.
 //              filename (char [])  : Name of file to write to.
 //                                                 
 //  Return values: If the function could successfully open the file: return 0
@@ -318,9 +308,9 @@ int writefile(struct record *record, char filename[])
 //
 //  Function name: readfile
 //
-//  DESCRIPTION:   Reads bank data from a text file.             
+//  DESCRIPTION:   Reads bank accounts from a text file into database.          
 //
-//  Parameters: record (*record) : Starting record.
+//  Parameters: record (*record) : The starting record.
 //              filename (char [])  : Name of file to read from. 
 //
 //  Return values: If the function could successfully open the file: return 0
@@ -330,10 +320,10 @@ int writefile(struct record *record, char filename[])
 
 int readfile(struct record **record, char filename[])
 {
+    char ch;
     int terminate;
     int i;
     int accnum;
-    char ch;
     char num[10];
     char name[30];
     char address[200];
@@ -369,10 +359,8 @@ int readfile(struct record **record, char filename[])
                 i++;
             }
             accnum = atoi(num);
-
             i = 0;
             terminate = 0;
-
             while (i < 30 && terminate == 0)
             {
                 ch = fgetc(f);
@@ -388,7 +376,6 @@ int readfile(struct record **record, char filename[])
             }
             i = 0;
             terminate = 0;
-
             while (i < 200 && terminate == 0)
             {
                 ch = fgetc(f);
@@ -415,11 +402,33 @@ int readfile(struct record **record, char filename[])
             memset(address, 0, sizeof(address));
             memset(num, 0, sizeof(num));
             }
-
         }
         fclose(f);
         return 0;
     }
 }
 
+/*****************************************************************
+//
+//  Function name: cleanup
+//
+//  DESCRIPTION:   Deletes all accounts.        
+//
+//  Parameters: record (**record) : The address of the starting pointer.
+//
+//  Return values: None.
+//              
+****************************************************************/
 
+void cleanup(struct record **record)
+{
+    struct record *current, *previous;
+    struct record *current = *record;
+    while (current != NULL)
+    {
+        previous = current;
+        current = current->next;
+        free(previous);
+    }
+    *record = current;
+}
