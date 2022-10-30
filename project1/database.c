@@ -348,7 +348,7 @@ int readfile(struct record **record, char filename[])
 void cleanup(struct record **record)
 {
     struct record *current, *previous;
-    struct record *current = *record;
+    current = *record;
     while (current != NULL)
     {
         previous = current;

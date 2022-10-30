@@ -158,7 +158,7 @@ while (quit != 1)
             finished = 1;
         }
         getaddress(address, 200);
-        add(&start, recordNum, name, address);
+        addRecord(&start, recordNum, name, address);
     }
 
     else if (strncmp(input, "printall", length) == 0)
