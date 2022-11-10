@@ -46,7 +46,6 @@ int main(int argc, char const *argv[])
     readfile("request1.bin", arr);
     arr2 = arr;
     printheader(arr2);
-    printf("done");
     return 0;
 }
 
@@ -64,15 +63,29 @@ int main(int argc, char const *argv[])
 
 void printheader(const unsigned char input[])
 {
+    int flag;
+    int i;
+    i = 0;
     printf("Souce port: %d\n", ((input[1]) << 8 | (input[0])));
     printf("Destination port: %d\n", ((input[3]) << 8 | (input[2])));
-    /*
-    26 = 00100110
-    DF = 11011111
-    result : 0010011011011111
-    */
-
-
+    printf(("Sequence number: %lu\n"), ((input[7]) << 24 | (input[6]) << 16 | (input[5]) << 8 | (input[4])));
+    printf(("Acknowledgement number: %lu\n"), ((input[11]) << 24 | (input[10]) << 16 | (input[9]) << 8 | (input[8])));
+    flag = input[13];
+    printf("Flags: ");
+    while (i < 6)
+    {
+        if ((flag & 1))
+        {
+            (i == 0) ? printf("FIN ") : printf("");
+            (i == 1) ? printf("SYN ") : printf("");
+            (i == 2) ? printf("RST ") : printf("");
+            (i == 3) ? printf("PSH ") : printf("");
+            (i == 4) ? printf("ACK ") : printf("");        
+            (i == 5) ? printf("URG ") : printf("");        
+        }
+        flag = flag >> 1;
+        i++;
+    }
 }
 /*****************************************************************
 //
@@ -115,6 +128,5 @@ int writefile(const char filename[], const unsigned char input[])
     f = fopen(filename, "wb");
     fwrite(input, sizeof(unsigned char), 20, f);
     return 0; 
-
 }
 
