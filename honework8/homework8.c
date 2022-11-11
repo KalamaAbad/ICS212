@@ -31,7 +31,6 @@ void makeheader(const unsigned char [], unsigned char []);
 //
 //  DESCRIPTION:   Generates response headers for binary files.
 //                 
-//                 
 //  Parameters:    argc (int)  : Not used.
 //                 argv (char*) : Not used.
 //
@@ -41,11 +40,14 @@ void makeheader(const unsigned char [], unsigned char []);
 
 int main(int argc, char const *argv[])
 {
-    const unsigned char *arr2;
-    unsigned char arr[20];
-    readfile("request1.bin", arr);
-    arr2 = arr;
-    printheader(arr2);
+    unsigned char headerFromFile[20];
+    const unsigned char *header;
+    unsigned char responseHeader[20];
+    readfile("request3.bin", headerFromFile);
+    header = headerFromFile;
+    printheader(header);
+    makeheader(header, responseHeader);
+    writefile("response3.bin", responseHeader);
     return 0;
 }
 
@@ -53,9 +55,9 @@ int main(int argc, char const *argv[])
 //
 //  Function name: printheader
 //
-//  DESCRIPTION:   
+//  DESCRIPTION:   Prints a TCP header.
 //                 
-//  Parameters:    filename (const char[])  : The filename.
+//  Parameters:    input (const unsigned char[])  : The header to print.
 //
 //  Return values: 0 if read, -1 if not.
 //
@@ -91,10 +93,10 @@ void printheader(const unsigned char input[])
 //
 //  Function name: readfile
 //
-//  DESCRIPTION:   Reads a binary file and stores in an unsigned char[]
+//  DESCRIPTION:   Reads a binary file.
 //                 
-//  Parameters:    filename (const char[])  : The filename.
-//                 output (unsigned char[]) : Binary data will be stored here.
+//  Parameters:    filename (const char[])  : The file to read from.
+//                 output (unsigned char[]) : Binary data will be stored here in hex format.
 //
 //  Return values: 0 if read, -1 if not.
 //
@@ -104,19 +106,23 @@ int readfile(const char filename[], unsigned char output[])
 {
     FILE *f;
     f = fopen(filename, "rb");
+    if (ferror(f) || f == NULL)
+    {
+    return -1;
+    }
     fread(output, sizeof(unsigned char), 20, f);
+    fclose(f);
     return 0; 
-
 }
 
 /*****************************************************************
 //
-//  Function name: readfile
+//  Function name: writefile
 //
-//  DESCRIPTION:   Writes a TCP header file.
+//  DESCRIPTION:   Writes a binary TCP header file.
 //                 
-//  Parameters:    filename (const char[])  : The filename.
-//                 output (const unsigned char[]) : Binary data to write to file.
+//  Parameters:    filename (const char[])  : The file to write to.
+//                 output (const unsigned char[]) : The header to write to the file.
 //
 //  Return values: 0 if read, -1 if not.
 //
@@ -126,7 +132,65 @@ int writefile(const char filename[], const unsigned char input[])
 {
     FILE *f;
     f = fopen(filename, "wb");
+    if (ferror(f) || f == NULL)
+    {
+        return -1;
+    }
     fwrite(input, sizeof(unsigned char), 20, f);
-    return 0; 
+    fclose(f);
+    return 0;
 }
 
+/*****************************************************************
+//
+//  Function name: makeheader
+//
+//  DESCRIPTION:   Generates a response header.
+//                 
+//  Parameters:    input (const unsigned char[])  : The header to generate a response to.
+//                 output (const unsigned char[]) : This is where we will store the response.
+//
+//  Return values: None.
+//
+****************************************************************/
+
+void makeheader(const unsigned char input[], unsigned char output[])
+{
+    unsigned int plusOne;
+
+    output[0] = input[2];
+    output[1] = input[3];
+
+    if (((input[1] << 8 | input[0]) >> 15) != 0)
+    {
+        output[2] = (input[0] ^ (1 << (6)));
+        output[3] = (input[1] ^ (1 << (2)));
+    }
+    else
+    {
+        output[2] = input[0];
+        output[3] = input[1];
+    }
+
+    output[8] = input[4];
+    output[9] = input[5];
+    output[10] = input[6];
+    output[11] = input[7];
+
+    plusOne = (((input[7]) << 24 | (input[6]) << 16 | (input[5]) << 8 | (input[4])) + 1);
+
+    output[7] = (plusOne >> 24) & 0xFF;
+    output[6] = (plusOne >> 16) & 0xFF;
+    output[5] = (plusOne >> 8) & 0xFF;
+    output[4] = plusOne & 0xFF;
+ 
+    if ((input[13] & 2) == 2)
+    {
+        output[13] = 16 ^ input[13];
+    }
+
+    for (int i = 14; i < 20; i++)
+    {
+        output[i] = input[i];
+    }
+}
