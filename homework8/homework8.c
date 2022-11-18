@@ -40,9 +40,6 @@ void makeheader(const unsigned char [], unsigned char []);
 
 int main(int argc, char const *argv[])
 {
-    /*
-    pull goddamn it
-    */
     unsigned char headerFromFile[20];
     const unsigned char *header;
     unsigned char responseHeader[20];
