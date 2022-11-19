@@ -66,8 +66,6 @@ address[size - 1] = '\0';
 
 int main(int argc, char *argv[])
 {
-
-
 string input;
 int length;
 int numInput;
@@ -75,11 +73,11 @@ int finished;
 char address[200];
 char name[30]; 
 char inputToChar[10];
-llist();
+list = new llist();
     while (1)
     {
         cout << "Please enter a menu option: " << endl;
-        cout << "add: Add a new record into the database" << endl;
+         cout << "add: Add a new record into the database" << endl;
         cout << "printall: Prints all records int he database" << endl;
         cout << "find: Finds record(s) with a specified account #" << endl;
         cout << "delete: Delete record(s) from the database using an account # as a key" << endl;
@@ -123,7 +121,7 @@ llist();
 				finished = -1;
 			}
 			getaddress(address, 200);
-			addrecord(numInput, address, name);
+			list.addRecord(numInput, name, address);
         }
 
 
