@@ -2,41 +2,40 @@
 //
 //  NAME:        Kalama Abad
 //
-//  HOMEWORK:    7
+//  HOMEWORK:    Project 2
 //
 //  CLASS:       ICS 212
 //
 //  INSTRUCTOR:  Ravi Narayan
 //
-//  DATE:        November 5, 2022
+//  DATE:        September 12, 2022
 //
-//  FILE:        homework7.cpp
+//  FILE:        user_interface.cpp
 //
-//  DESCRIPTION: This file contains C++ functions for seeing if
-//               a number is a multiple of 4.
+//  DESCRIPTION: This file contains C functions for a user interface.
 //   
 //
 ****************************************************************/
-
 #include <iostream>
-#include <iomanip>
-#include <limits>
+#include <istream>
 #include <string>
 #include <cstring>
-
+#include <limits>
+#include "llist.h"
 
 using namespace std;
 
 /*****************************************************************
 //
-//  Function name: main
+//  Function name: getaddress
 //
-//  DESCRIPTION:   Prints a table that specifies whether a number
-//                 is a multiple of 4.                
-//
-//  Parameters:    None.
-//
-//  Return values: 0 after printing a table.
+//  DESCRIPTION: Writes user input to an address-storing char[]
+//                 
+//  Parameters: name (char[]) : the array to store into 
+//              size (int)    : array size.      
+//                             
+//  Return values: None.
+//              
 //
 ****************************************************************/
 
@@ -49,16 +48,34 @@ strncpy(address, input.c_str(), size);
 address[size - 1] = '\0';
 }
 
-int user_interface() 
-{
-    string input;
-    int length;
-    int numInput;
-    int finished;
-    char address[200];
-	char name[30]; 
-    char inputToChar[10];
+/*****************************************************************
+//
+//  Function name: main
+//
+//  DESCRIPTION: Allows user to input menu options to interact with
+//               the database.
+//                 
+//  Parameters:    argc (int) : The number of elements in argv.
+//                 argv (char*[]) : An array of arguments passed
+//                                  to the program.
+//
+//  Return values: 0 if quit.
+//              
+//
+****************************************************************/
 
+int main(int argc, char *argv[])
+{
+
+
+string input;
+int length;
+int numInput;
+int finished;
+char address[200];
+char name[30]; 
+char inputToChar[10];
+llist();
     while (1)
     {
         cout << "Please enter a menu option: " << endl;
@@ -106,8 +123,7 @@ int user_interface()
 				finished = -1;
 			}
 			getaddress(address, 200);
-			add
-
+			addrecord(numInput, address, name);
         }
 
 
@@ -115,4 +131,5 @@ int user_interface()
     }
     cout << "You live at: " << endl << address << endl;
     return 0;
+
 }
