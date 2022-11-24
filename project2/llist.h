@@ -1,6 +1,6 @@
+#include "record.h"
 class llist
 
-#include "record.h"
 
 {
 

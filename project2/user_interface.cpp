@@ -21,7 +21,7 @@
 #include <string>
 #include <cstring>
 #include <limits>
-#include "llist.h"
+#include "llist.cpp"
 
 using namespace std;
 
@@ -66,18 +66,24 @@ address[size - 1] = '\0';
 
 int main(int argc, char *argv[])
 {
+cout << "Hi";
 string input;
+int quit;
 int length;
 int numInput;
 int finished;
 char address[200];
 char name[30]; 
 char inputToChar[10];
-list = new llist();
+quit = 0;
+cout << "guh";
+llist list;
+cout << "argertg";
+
     while (1)
     {
         cout << "Please enter a menu option: " << endl;
-         cout << "add: Add a new record into the database" << endl;
+        cout << "add: Add a new record into the database" << endl;
         cout << "printall: Prints all records int he database" << endl;
         cout << "find: Finds record(s) with a specified account #" << endl;
         cout << "delete: Delete record(s) from the database using an account # as a key" << endl;
@@ -109,6 +115,8 @@ list = new llist();
         		else
         		{
             	finished = -1;
+				cin.clear();
+            	cin.ignore(numeric_limits<streamsize>::max(), '\n');
         		}
             }
 			finished = 0;
@@ -118,16 +126,74 @@ list = new llist();
 				getline(cin, input);
 		        strncpy(name, input.c_str(), 30);
 				name[29] = '\0';
-				finished = -1;
+            	finished = -1;
 			}
 			getaddress(address, 200);
 			list.addRecord(numInput, name, address);
         }
-
-
-
+		else if (strncmp(inputToChar, "delete", length) == 0)
+		{
+			cout << "Enter an account number to delete from:" << endl;
+			finished = 0;
+            while (finished == 0)
+            {
+                cout << "Please enter an integer greater than zero:" << endl;
+        		cin >> numInput;
+        		if (!cin)
+        		{
+            	cout << "Invalid input: You entered a string." << endl;
+            	cin.clear();
+            	cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        		}
+        		else if (numInput <= 0)
+        		{
+            	cout << "Invalid input: You entered zero or a negative number." << endl;
+            	cin.clear();
+            	cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        		}
+        		else
+        		{
+            	finished = -1;
+        		}
+            }
+			list.deleteRecord(numInput);
+		}
+		else if (strncmp(inputToChar, "printall", length) == 0)
+		{
+			list.printAllRecords();
+		}
+		else if (strncmp(inputToChar, "find", length) == 0)
+		{
+			cout << "Enter an account number to find:" << endl;
+			finished = 0;
+            while (finished == 0)
+            {
+                cout << "Please enter an integer greater than zero:" << endl;
+        		cin >> numInput;
+        		if (!cin)
+        		{
+            	cout << "Invalid input: You entered a string." << endl;
+            	cin.clear();
+            	cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        		}
+        		else if (numInput <= 0)
+        		{
+            	cout << "Invalid input: You entered zero or a negative number." << endl;
+            	cin.clear();
+            	cin.ignore(numeric_limits<streamsize>::max(), '\n');
+        		}
+        		else
+        		{
+            	finished = -1;
+        		}
+            }
+			list.findRecord(numInput);
+		}
+		else if (strncmp(inputToChar, "quit", length) == 0)
+		{
+			quit = 1;
+		}
+		            	cin.clear();
+            	cin.ignore(numeric_limits<streamsize>::max(), '\n');
     }
-    cout << "You live at: " << endl << address << endl;
-    return 0;
-
 }
