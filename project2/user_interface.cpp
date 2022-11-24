@@ -46,6 +46,8 @@ string input;
 getline(cin, input, ';');
 strncpy(address, input.c_str(), size);
 address[size - 1] = '\0';
+cin.clear();
+cin.ignore(numeric_limits<streamsize>::max(), '\n');
 }
 
 /*****************************************************************
@@ -76,11 +78,9 @@ char address[200];
 char name[30]; 
 char inputToChar[10];
 quit = 0;
-cout << "guh";
 llist list;
-cout << "argertg";
 
-    while (1)
+    while (quit != 1)
     {
         cout << "Please enter a menu option: " << endl;
         cout << "add: Add a new record into the database" << endl;
@@ -155,6 +155,8 @@ cout << "argertg";
         		{
             	finished = -1;
         		}
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
             }
 			list.deleteRecord(numInput);
 		}
@@ -186,6 +188,8 @@ cout << "argertg";
         		{
             	finished = -1;
         		}
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
             }
 			list.findRecord(numInput);
 		}
@@ -193,7 +197,5 @@ cout << "argertg";
 		{
 			quit = 1;
 		}
-		            	cin.clear();
-            	cin.ignore(numeric_limits<streamsize>::max(), '\n');
     }
 }
