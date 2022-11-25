@@ -5,11 +5,18 @@
 using namespace std;
 
 struct record *start;
+<<<<<<< HEAD
 char filename[20];
 
 llist::llist()
 {
     start = nullptr;
+=======
+
+llist::llist()
+{
+    start = 0;
+>>>>>>> eee3de10522b3406aba8a460fc73b844bf92f55d
 }
 
 llist::llist(char in[])
@@ -26,21 +33,36 @@ llist::~llist()
 
 void llist::addRecord(int uaccountno, char uname[], char uaddress[])
 {
+<<<<<<< HEAD
     struct record *temp, *newNode;
     temp = start;
     newNode = new struct record;
+=======
+    cout << "Called addrecord." << endl;
+    struct record *temp, *newNode;
+    temp = start;
+    newNode = (struct record*)malloc(sizeof(struct record));
+>>>>>>> eee3de10522b3406aba8a460fc73b844bf92f55d
     newNode->accountno = uaccountno;
     strcpy(newNode->name, uname);
     strcpy(newNode->address, uaddress);
     newNode->next = NULL;
+<<<<<<< HEAD
     if (temp == nullptr || temp->accountno < newNode->accountno)
+=======
+    if (temp == NULL || temp->accountno < newNode->accountno)
+>>>>>>> eee3de10522b3406aba8a460fc73b844bf92f55d
     {
         newNode->next = temp;
         start = newNode;
     }
     else
     {
+<<<<<<< HEAD
         while (temp->next != nullptr && temp->next->accountno > newNode->accountno)
+=======
+        while (temp->next != NULL && temp->next->accountno > newNode->accountno)
+>>>>>>> eee3de10522b3406aba8a460fc73b844bf92f55d
         {
             temp = temp->next;
         }
@@ -79,6 +101,7 @@ void llist::printAllRecords()
     cout << "Called printAllRecords." << endl;
     struct record *current;
     current = start;
+<<<<<<< HEAD
     cout << endl << "================ Start =================" << endl << endl; 
     if (current == nullptr)
     {
@@ -93,6 +116,22 @@ void llist::printAllRecords()
         current = current->next;
     }
     cout << endl << "================ End =================" << endl << endl; 
+=======
+    cout << start << current;
+    printf("\n========== Current Database ==========\n");
+    if (start == 0)
+    {
+        printf("\nNo records in database.\n");
+    }
+    while (current != 0)
+    {
+        printf("\nAccount #: %d\n", current->accountno);
+	    printf("Name: %s\n", current->name);
+	    printf("Address: %s\n", current->address);
+        current = current->next;
+    }
+    printf("\n================ End =================\n");    
+>>>>>>> eee3de10522b3406aba8a460fc73b844bf92f55d
 }
 
 int llist::deleteRecord(int uaccountno)
@@ -180,5 +219,7 @@ void llist::cleanup()
     }
     start = current;
 }
+
+
 
 
