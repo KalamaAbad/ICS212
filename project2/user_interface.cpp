@@ -68,7 +68,6 @@ cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
 int main(int argc, char *argv[])
 {
-cout << "Hi";
 string input;
 int quit;
 int length;
