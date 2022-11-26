@@ -144,8 +144,9 @@ int llist::readfile()
 {
     struct record *current;
     char accountnum[10];
-    string name;
-    string address;
+    char name[30];
+    char address[50];
+    int num;
     ifstream myfile ("filename.txt");
     if (!myfile.is_open())
     {
@@ -156,7 +157,10 @@ int llist::readfile()
         while (!myfile.eof())
         {
             myfile.getline(accountnum, 10, '|');
-
+            myfile.getline(name, 30, '|');
+            myfile.getline(address, 50, '|');
+            num = atoi(accountnum);
+            addRecord(num, name, address);
         }
         myfile.close();
         return 0;
