@@ -9,6 +9,38 @@ using namespace std;
 
 struct record *start;
 char filename[20];
+int debug;
+
+#ifdef DEBUG
+debug = 1;
+#endif
+
+ostream& operator<<(ostream& output, const llist &obj) 
+{
+    output << "Called printAllRecords." << endl;
+    struct record *current;
+    current = obj.start;
+    output << endl << "================ Start =================" << endl << endl; 
+    if (current == nullptr)
+    {
+        output << endl << "\nNo records in database." << endl;
+    }
+    while (current != nullptr)
+    {
+        output << "Account #: " << current->accountno << endl;
+	    output << "Name: " << current->name << endl;
+	    output << "Address: " << current->address << endl;
+        output << endl;
+        current = current->next;
+    }
+    output << "================ End =================" << endl << endl;
+    return output;
+}
+
+llist::operator=(const llist &obj)
+{
+
+}
 
 llist::llist()
 {
@@ -18,7 +50,14 @@ llist::llist()
 llist::llist(char in[])
 {
     strcpy(filename, in);
-    llist();
+    start = nullptr;
+    readfile();
+}
+
+llist::llist(const llist &obj) throw()
+{
+    start = obj.start;
+    strcpy(filename, obj.filename);
 }
 
 llist::~llist()
@@ -147,25 +186,38 @@ int llist::readfile()
     char name[30];
     char address[50];
     int num;
-    ifstream myfile ("filename.txt");
+    int terminate;
+    terminate = 1;
+    ifstream myfile (filename);
     if (!myfile.is_open())
     {
         return -1;
     }
     else
     {
-        while (!myfile.eof())
+        while (terminate != 0 && !myfile.eof())
         {
             myfile.getline(accountnum, 10, '|');
             myfile.getline(name, 30, '|');
             myfile.getline(address, 50, '|');
+            if (myfile.eof())
+            {
+                terminate = 0;
+            }
+            else
+            {
             num = atoi(accountnum);
             addRecord(num, name, address);
+            }
+            memset((accountnum), 0, sizeof(accountnum));
+            memset((name), 0, sizeof(name));
+            memset((address), 0, sizeof(address));
+
         }
+        
         myfile.close();
         return 0;
     }
-
 
 }
 

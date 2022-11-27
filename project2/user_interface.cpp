@@ -76,8 +76,10 @@ int finished;
 char address[200];
 char name[30]; 
 char inputToChar[10];
+char filename[13] = "filename.txt";
 quit = 0;
-llist list;
+llist list(filename);
+llist list2(list);
 
     while (quit != 1)
     {
@@ -161,7 +163,7 @@ llist list;
 		}
 		else if (strncmp(inputToChar, "printall", length) == 0)
 		{
-			list.printAllRecords();
+			cout << list << endl;
 		}
 		else if (strncmp(inputToChar, "find", length) == 0)
 		{
