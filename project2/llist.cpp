@@ -1,58 +1,106 @@
+/*****************************************************************
+//
+//  NAME:        Kalama Abad
+//
+//  HOMEWORK:    Project 2
+//
+//  CLASS:       ICS 212
+//
+//  INSTRUCTOR:  Ravi Narayan
+//
+//  DATE:        November 26, 2022
+//
+//  FILE:        llist.cpp
+//
+//  DESCRIPTION:
+//   This file contains functions for reading and writing to the database.
+//
+****************************************************************/
+
 #include "llist.h"
 #include "fstream"
-#include "iostream"
 #include "cstring"
 #include <string.h>
 #include <sstream>
+#include <cstdlib>
+#include <ostream>
+#include <iostream>
+#include <istream>
+#include <string>
+#include <limits>
 
 using namespace std;
 
 struct record *start;
 char filename[20];
-int debug;
 
-#ifdef DEBUG
-debug = 1;
-#endif
+/*****************************************************************
+//
+//  Function name: = operator overloader
+//
+//  DESCRIPTION:   Allows for using '=' on llist objects.
+//
+//  Parameters:    obj (const llist) : The original llist to copy.
+//
+//  Return values: The copied llist.
+//
+****************************************************************/
 
-ostream& operator<<(ostream& output, const llist &obj) 
-{
-    output << "Called printAllRecords." << endl;
-    struct record *current;
-    current = obj.start;
-    output << endl << "================ Start =================" << endl << endl; 
-    if (current == nullptr)
-    {
-        output << endl << "\nNo records in database." << endl;
-    }
-    while (current != nullptr)
-    {
-        output << "Account #: " << current->accountno << endl;
-	    output << "Name: " << current->name << endl;
-	    output << "Address: " << current->address << endl;
-        output << endl;
-        current = current->next;
-    }
-    output << "================ End =================" << endl << endl;
-    return output;
-}
-
-llist::operator=(const llist &obj)
+llist&llist::operator = (const llist& obj)
 {
 
+    strcpy(filename, obj.filename);
+    start = obj.start;
+    return *this;
 }
+
+/*****************************************************************
+//
+//  Function name: llist()
+//
+//  DESCRIPTION:   Basic constructor method.
+//
+//  Parameters:    None.
+//
+//  Return values: Initializes a new llist.
+//
+****************************************************************/
 
 llist::llist()
 {
-    start = nullptr;
+    start = 0;
 }
+
+/*****************************************************************
+//
+//  Function name: llist()
+//
+//  DESCRIPTION:   Copy constructor method.
+//
+//  Parameters:    in (char []) : The filename to read/write to.
+//
+//  Return values: None.
+//
+****************************************************************/
 
 llist::llist(char in[])
 {
     strcpy(filename, in);
-    start = nullptr;
+    start = 0;
     readfile();
 }
+
+/*****************************************************************
+//
+//  Function name: llist()
+//
+//  DESCRIPTION:   Copy constructor method.
+//
+//  Parameters:    obj (const llist) : The original database.
+//
+//  Return values: None.
+//
+****************************************************************/
 
 llist::llist(const llist &obj) throw()
 {
@@ -60,14 +108,47 @@ llist::llist(const llist &obj) throw()
     strcpy(filename, obj.filename);
 }
 
+/*****************************************************************
+//
+//  Function name: ~llist()
+//
+//  DESCRIPTION:   Destructor method, deallocates space
+//                 and writes database to a file.
+//
+//  Parameters:    None.
+//
+//  Return values: None.
+//
+****************************************************************/
+
 llist::~llist()
 {
     writefile();
     cleanup();
 }
 
+/*****************************************************************
+//
+//  Function name: add
+//
+//  DESCRIPTION:   Adds a record to the database.
+//
+//  Parameters:    uaccountno (int)  : User account number.
+//                 uname (char[])    : Name to be added to record.
+//                 uaddress (char[]) : Address to be added to record.
+//
+//  Return values: None.
+//
+****************************************************************/
+
 void llist::addRecord(int uaccountno, char uname[], char uaddress[])
 {
+    #ifdef DEBUG
+        cout << "Called addRecord" << endl;
+        cout << "Account #: " << uaccountno << endl;
+        cout << "Name: " << uname << endl;
+        cout << "Address: " << uaddress << endl;
+    #endif
     struct record *temp, *newNode;
     temp = start;
     newNode = new struct record;
@@ -75,14 +156,14 @@ void llist::addRecord(int uaccountno, char uname[], char uaddress[])
     strcpy(newNode->name, uname);
     strcpy(newNode->address, uaddress);
     newNode->next = NULL;
-    if (temp == nullptr || temp->accountno < newNode->accountno)
+    if (temp == 0 || temp->accountno < newNode->accountno)
     {
         newNode->next = temp;
         start = newNode;
     }
     else
     {
-        while (temp->next != nullptr && temp->next->accountno > newNode->accountno)
+        while (temp->next != 0 && temp->next->accountno > newNode->accountno)
         {
             temp = temp->next;
         }
@@ -91,8 +172,25 @@ void llist::addRecord(int uaccountno, char uname[], char uaddress[])
     }
 }
 
+/*****************************************************************
+//
+//  Function name: findRecord
+//
+//  DESCRIPTION:   Finds a record.
+//
+//  Parameters: uaccountno (int) : User account number to add a record to.
+//
+//  Return values: 0 if an account was found, -1 if not.
+//
+****************************************************************/
+
 int llist::findRecord(int uaccountno)
 {
+    #ifdef DEBUG
+        cout << "Called findRecord" << endl;
+        cout << "Account #: " << uaccountno << endl;
+    #endif
+
     struct record *temp;
     int found;
     temp = start;
@@ -108,38 +206,67 @@ int llist::findRecord(int uaccountno)
     while (temp != NULL && temp->accountno == uaccountno)
     {
         cout << "Account #: " << temp->accountno << endl;
-	    cout << "Name: " << temp->name << endl;
-	    cout << "Address: " << temp->address << endl;
+        cout << "Name: " << temp->name << endl;
+        cout << "Address: " << temp->address << endl;
         cout << endl;
         temp = temp->next;
     }
     return found;
 }
 
+/*****************************************************************
+//
+//  Function name: printAllRecords
+//
+//  DESCRIPTION:   Prints all records in the database.
+//
+//  Parameters: None.
+//
+//  Return values: None.
+//
+****************************************************************/
+
 void llist::printAllRecords()
 {
+    #ifdef DEBUG
     cout << "Called printAllRecords." << endl;
+    #endif
     struct record *current;
     current = start;
-    cout << endl << "================ Start =================" << endl << endl; 
-    if (current == nullptr)
+    cout << endl << "================ Start =================" << endl << endl;
+    if (current == 0)
     {
         cout << endl << "\nNo records in database." << endl;
     }
-    while (current != nullptr)
+    while (current != 0)
     {
         cout << "Account #: " << current->accountno << endl;
-	    cout << "Name: " << current->name << endl;
-	    cout << "Address: " << current->address << endl;
+        cout << "Name: " << current->name << endl;
+        cout << "Address: " << current->address << endl;
         cout << endl;
         current = current->next;
     }
-    cout << endl << "================ End =================" << endl << endl; 
+    cout << endl << "================ End =================" << endl << endl;
 }
+
+/*****************************************************************
+//
+//  Function name: deleteRecord
+//
+//  DESCRIPTION: Deletes a record
+//
+//  Parameters: uaccountno (int)  : User account number to delete records from.
+//
+//  Return values: 0 if an account was deleted, -1 if not.
+//
+****************************************************************/
 
 int llist::deleteRecord(int uaccountno)
 {
-    cout << "Called deleteRecord." << endl;
+    #ifdef DEBUG
+        cout << "Called deleteRecord" << endl;
+        cout << "Account # to delete: " << uaccountno << endl;
+    #endif
     struct record *deleteMe, *current, *prev;
     int deleted;
     current = start;
@@ -150,7 +277,7 @@ int llist::deleteRecord(int uaccountno)
         {
             deleteMe = current;
             current = current->next;
-            free(deleteMe);
+            delete(deleteMe);
             start = current;
             deleted = 0;
         }
@@ -179,9 +306,21 @@ int llist::deleteRecord(int uaccountno)
     return deleted;
 }
 
+/*****************************************************************
+//
+//  Function name: readfile
+//
+//  DESCRIPTION:   Reads bank accounts from a text file into database.
+//
+//  Parameters: None.
+//
+//  Return values: If the function could successfully open the file: return 0
+//                 Otherwise, return -1
+//
+****************************************************************/
+
 int llist::readfile()
 {
-    struct record *current;
     char accountnum[10];
     char name[30];
     char address[50];
@@ -214,12 +353,25 @@ int llist::readfile()
             memset((address), 0, sizeof(address));
 
         }
-        
+
         myfile.close();
         return 0;
     }
 
 }
+
+/*****************************************************************
+//
+//  Function name: writefile
+//
+//  DESCRIPTION:   Writes bank data to a text file.
+//
+//  Parameters: None.
+//
+//  Return values: If the function could successfully open the file: return 0
+//                 Otherwise, return -1
+//
+****************************************************************/
 
 int llist::writefile()
 {
@@ -235,8 +387,8 @@ int llist::writefile()
         while (current != NULL)
         {
         myfile << current->accountno << "|";
-	    myfile << current->name << "|";
-	    myfile << current->address << "|";
+        myfile << current->name << "|";
+        myfile << current->address << "|";
         current = current->next;
         }
         myfile.close();
@@ -245,6 +397,18 @@ int llist::writefile()
 
 
 }
+
+/*****************************************************************
+//
+//  Function name: cleanup
+//
+//  DESCRIPTION:   Deletes all accounts.
+//
+//  Parameters: None.
+//
+//  Return values: None.
+//
+****************************************************************/
 
 void llist::cleanup()
 {
@@ -258,7 +422,3 @@ void llist::cleanup()
     }
     start = current;
 }
-
-
-
-

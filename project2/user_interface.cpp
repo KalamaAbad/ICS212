@@ -8,20 +8,21 @@
 //
 //  INSTRUCTOR:  Ravi Narayan
 //
-//  DATE:        September 12, 2022
+//  DATE:        November 26, 2022
 //
 //  FILE:        user_interface.cpp
 //
 //  DESCRIPTION: This file contains C functions for a user interface.
-//   
+//
 //
 ****************************************************************/
+
 #include <iostream>
 #include <istream>
 #include <string>
 #include <cstring>
 #include <limits>
-#include "llist.cpp"
+#include "llist.h"
 
 using namespace std;
 
@@ -30,12 +31,12 @@ using namespace std;
 //  Function name: getaddress
 //
 //  DESCRIPTION: Writes user input to an address-storing char[]
-//                 
-//  Parameters: name (char[]) : the array to store into 
-//              size (int)    : array size.      
-//                             
+//
+//  Parameters: name (char[]) : the array to store into
+//              size (int)    : array size.
+//
 //  Return values: None.
-//              
+//
 //
 ****************************************************************/
 
@@ -56,30 +57,32 @@ cin.ignore(numeric_limits<streamsize>::max(), '\n');
 //
 //  DESCRIPTION: Allows user to input menu options to interact with
 //               the database.
-//                 
+//
 //  Parameters:    argc (int) : The number of elements in argv.
 //                 argv (char*[]) : An array of arguments passed
 //                                  to the program.
 //
 //  Return values: 0 if quit.
-//              
+//
 //
 ****************************************************************/
 
 int main(int argc, char *argv[])
 {
+#ifdef DEBUG
+    cout << " ====== DEBUG MODE IS ON ===== " << endl;
+#endif
 string input;
 int quit;
 int length;
 int numInput;
 int finished;
 char address[200];
-char name[30]; 
+char name[30];
 char inputToChar[10];
 char filename[13] = "filename.txt";
 quit = 0;
 llist list(filename);
-llist list2(list);
 
     while (quit != 1)
     {
@@ -92,7 +95,7 @@ llist list2(list);
         getline(cin, input);
         strncpy(inputToChar, input.c_str(), 10);
         length = strlen(inputToChar) - 1;
-        
+
         if (strncmp(inputToChar, "add", length) == 0)
         {
             cout << "What is the account number?" << endl;
@@ -100,103 +103,103 @@ llist list2(list);
             while (finished == 0)
             {
                 cout << "Please enter an integer greater than zero:" << endl;
-        		cin >> numInput;
-        		if (!cin)
-        		{
-            	cout << "Invalid input: You entered a string." << endl;
-            	cin.clear();
-            	cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        		}
-        		else if (numInput <= 0)
-        		{
-            	cout << "Invalid input: You entered zero or a negative number." << endl;
-            	cin.clear();
-            	cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        		}
-        		else
-        		{
-            	finished = -1;
-				cin.clear();
-            	cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        		}
+                cin >> numInput;
+                if (!cin)
+                {
+                cout << "Invalid input: You entered a string." << endl;
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                }
+                else if (numInput <= 0)
+                {
+                cout << "Invalid input: You entered zero or a negative number." << endl;
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                }
+                else
+                {
+                finished = -1;
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                }
             }
-			finished = 0;
-			while (finished == 0)
-			{
-				cout << "What is the name?" << endl;
-				getline(cin, input);
-		        strncpy(name, input.c_str(), 30);
-				name[29] = '\0';
-            	finished = -1;
-			}
-			getaddress(address, 200);
-			list.addRecord(numInput, name, address);
+            finished = 0;
+            while (finished == 0)
+            {
+                cout << "What is the name?" << endl;
+                getline(cin, input);
+                strncpy(name, input.c_str(), 30);
+                name[29] = '\0';
+                finished = -1;
+            }
+            getaddress(address, 200);
+            list.addRecord(numInput, name, address);
         }
-		else if (strncmp(inputToChar, "delete", length) == 0)
-		{
-			cout << "Enter an account number to delete from:" << endl;
-			finished = 0;
+        else if (strncmp(inputToChar, "delete", length) == 0)
+        {
+            cout << "Enter an account number to delete from:" << endl;
+            finished = 0;
             while (finished == 0)
             {
                 cout << "Please enter an integer greater than zero:" << endl;
-        		cin >> numInput;
-        		if (!cin)
-        		{
-            	cout << "Invalid input: You entered a string." << endl;
-            	cin.clear();
-            	cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        		}
-        		else if (numInput <= 0)
-        		{
-            	cout << "Invalid input: You entered zero or a negative number." << endl;
-            	cin.clear();
-            	cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        		}
-        		else
-        		{
-            	finished = -1;
-        		}
-				cin.clear();
-				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cin >> numInput;
+                if (!cin)
+                {
+                cout << "Invalid input: You entered a string." << endl;
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                }
+                else if (numInput <= 0)
+                {
+                cout << "Invalid input: You entered zero or a negative number." << endl;
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                }
+                else
+                {
+                finished = -1;
+                }
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
             }
-			list.deleteRecord(numInput);
-		}
-		else if (strncmp(inputToChar, "printall", length) == 0)
-		{
-			cout << list << endl;
-		}
-		else if (strncmp(inputToChar, "find", length) == 0)
-		{
-			cout << "Enter an account number to find:" << endl;
-			finished = 0;
+            list.deleteRecord(numInput);
+        }
+        else if (strncmp(inputToChar, "printall", length) == 0)
+        {
+            list.printAllRecords();
+        }
+        else if (strncmp(inputToChar, "find", length) == 0)
+        {
+            cout << "Enter an account number to find:" << endl;
+            finished = 0;
             while (finished == 0)
             {
                 cout << "Please enter an integer greater than zero:" << endl;
-        		cin >> numInput;
-        		if (!cin)
-        		{
-            	cout << "Invalid input: You entered a string." << endl;
-            	cin.clear();
-            	cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        		}
-        		else if (numInput <= 0)
-        		{
-            	cout << "Invalid input: You entered zero or a negative number." << endl;
-            	cin.clear();
-            	cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        		}
-        		else
-        		{
-            	finished = -1;
-        		}
-				cin.clear();
-				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                cin >> numInput;
+                if (!cin)
+                {
+                cout << "Invalid input: You entered a string." << endl;
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                }
+                else if (numInput <= 0)
+                {
+                cout << "Invalid input: You entered zero or a negative number." << endl;
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                }
+                else
+                {
+                finished = -1;
+                }
+                cin.clear();
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
             }
-			list.findRecord(numInput);
-		}
-		else if (strncmp(inputToChar, "quit", length) == 0)
-		{
-			quit = 1;
-		}
+            list.findRecord(numInput);
+        }
+        else if (strncmp(inputToChar, "quit", length) == 0)
+        {
+            quit = 1;
+        }
     }
 }

@@ -1,5 +1,27 @@
-#include "record.h"
+/*****************************************************************
+//
+//  NAME:        Kalama Abad
+//
+//  HOMEWORK:    Project 2
+//
+//  CLASS:       ICS 212
+//
+//  INSTRUCTOR:  Ravi Narayan
+//
+//  DATE:        November 26, 2022
+//
+//  FILE:        llist.h
+//
+//  DESCRIPTION:
+//   This file contains function declarations for a database.
+//
+****************************************************************/
 
+#ifndef LLISTH
+#define LLISTH
+
+#include "record.h"
+#include <ostream>
 
 class llist
 {
@@ -20,7 +42,7 @@ public:
     int findRecord(int);
     void printAllRecords();
     int deleteRecord(int);
-    friend std::ostream& operator<<(std::ostream& output, const llist &obj);
-    llist& operator=(const llist& obj);
+    llist& operator=(const llist&);
 };
 
+#endif
