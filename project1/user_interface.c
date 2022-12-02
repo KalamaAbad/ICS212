@@ -13,7 +13,7 @@
 //  FILE:        user_interface.c
 //
 //  DESCRIPTION: This file contains C functions for a user interface.
-//   
+//
 //
 ****************************************************************/
 
@@ -28,12 +28,12 @@ int debug = 0;
 //  Function name: getaddress
 //
 //  DESCRIPTION: Writes user input to an address-storing char[]
-//                 
-//  Parameters: name (char[]) : the array to store into 
-//              size (int)    : array size.      
-//                             
+//
+//  Parameters: name (char[]) : the array to store into
+//              size (int)    : array size.
+//
 //  Return values: None.
-//              
+//
 //
 ****************************************************************/
 
@@ -63,13 +63,13 @@ address[i] = '\0';
 //
 //  DESCRIPTION: Allows user to input menu options to interact with
 //               the database.
-//                 
+//
 //  Parameters:    argc (int) : The number of elements in argv.
 //                 argv (char*[]) : An array of arguments passed
 //                                  to the program.
 //
 //  Return values: 0 if quit.
-//              
+//
 //
 ****************************************************************/
 
@@ -108,7 +108,7 @@ else if (argc > 2)
 }
 
 
-while (quit != 1) 
+while (quit != 1)
 {
     printf("%s", "Please pick an option from the menu and enter into the terminal.\n");
     printf("%s", "add: Add a new record in the database\n");
@@ -127,7 +127,7 @@ while (quit != 1)
 
         while (finished == 0)
         {
-            if (scanf("%d", &numInput) == 1) 
+            if (scanf("%d", &numInput) == 1)
             {
                 if (numInput > 0)
                 {
@@ -140,8 +140,8 @@ while (quit != 1)
                     while ((eatMe = getchar()) != EOF && eatMe != '\n');
                 }
             }
-            else 
-            {  
+            else
+            {
                 printf("%s", "Error: Invalid input. You entered a string or character. Please enter an integer.\n");
                 while ((eatMe = getchar()) != EOF && eatMe != '\n');
             }
@@ -153,7 +153,7 @@ while (quit != 1)
         while (finished == 0)
         {
             printf("%s", "What is the name?\n");
-            scanf("%s", name);  
+            scanf("%s", name);
             while ((eatMe = getchar()) != EOF && eatMe != '\n');
             finished = 1;
         }
@@ -171,8 +171,8 @@ while (quit != 1)
         finished = 0;
         while (finished == 0)
         {
-            printf("%s", "Enter an account number to find\n");  
-            if (scanf("%d", &numInput) == 1) 
+            printf("%s", "Enter an account number to find\n");
+            if (scanf("%d", &numInput) == 1)
             {
                 if (numInput > 0)
                 {
@@ -185,8 +185,8 @@ while (quit != 1)
                     while ((eatMe = getchar()) != EOF && eatMe != '\n');
                 }
             }
-            else 
-            {  
+            else
+            {
                 printf("%s", "Error: Invalid input. You entered a string or character. Please enter an integer.\n");
                 while ((eatMe = getchar()) != EOF && eatMe != '\n');
             }
@@ -199,8 +199,8 @@ while (quit != 1)
         finished = 0;
         while (finished == 0)
         {
-            printf("%s", "Enter an account number to delete\n");  
-            if (scanf("%d", &numInput) == 1) 
+            printf("%s", "Enter an account number to delete\n");
+            if (scanf("%d", &numInput) == 1)
             {
                 if (numInput > 0)
                 {
@@ -213,14 +213,14 @@ while (quit != 1)
                     while ((eatMe = getchar()) != EOF && eatMe != '\n');
                 }
             }
-            else 
-            {  
+            else
+            {
                 printf("%s", "Error: Invalid input. You entered a string or character. Please enter an integer.\n");
                 while ((eatMe = getchar()) != EOF && eatMe != '\n');
             }
         }
 
-        
+
     }
     else if (strncmp(input, "quit", length) == 0)
     {

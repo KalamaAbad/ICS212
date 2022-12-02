@@ -26,13 +26,6 @@
 class llist
 {
 
-private:
-    record *    start;
-    char        filename[20];
-    int         readfile();
-    int         writefile();
-    void        cleanup();
-
 public:
     llist();
     llist(char[]);
@@ -43,6 +36,14 @@ public:
     void printAllRecords();
     int deleteRecord(int);
     llist& operator=(const llist&);
+    friend std::ostream& operator<<(std::ostream&, const llist&);
+
+private:
+    record *    start;
+    char        filename[20];
+    int         readfile();
+    int         writefile();
+    void        cleanup();
 };
 
 #endif

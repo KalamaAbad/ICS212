@@ -23,6 +23,7 @@
 #include <cstring>
 #include <limits>
 #include "llist.h"
+#include "llist.cpp"
 
 using namespace std;
 
@@ -166,7 +167,7 @@ llist list(filename);
         }
         else if (strncmp(inputToChar, "printall", length) == 0)
         {
-            list.printAllRecords();
+            cout << list;
         }
         else if (strncmp(inputToChar, "find", length) == 0)
         {

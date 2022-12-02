@@ -21,8 +21,6 @@
 #include "fstream"
 #include "cstring"
 #include <string.h>
-#include <sstream>
-#include <cstdlib>
 #include <ostream>
 #include <iostream>
 #include <istream>
@@ -36,7 +34,43 @@ char filename[20];
 
 /*****************************************************************
 //
-//  Function name: = operator overloader
+//  Function name: operator<<
+//
+//  DESCRIPTION:   Allows for using '<<' on llist objects.
+//
+//  Parameters:    obj (const llist) : The original llist to copy.
+//                 os (ostream) : The stream to write to.
+//
+//  Return values: The copied llist.
+//
+****************************************************************/
+
+std::ostream& operator<<(std::ostream& os, const llist& list)
+{
+    #ifdef DEBUG
+        cout << "Using overriden << operator to print llist." << endl;
+    #endif
+    struct record *current = list.start;
+    os << endl << "================ Start =================" << endl << endl;
+    if (current == 0)
+    {
+        os << endl << "\nNo records in database." << endl;
+    }
+    while (current != 0)
+    {
+        os << "Account #: " << current->accountno << endl;
+        os << "Name: " << current->name << endl;
+        os << "Address: " << current->address << endl;
+        os << endl;
+        current = current->next;
+    }
+    os << endl << "================ End =================" << endl << endl;
+    return os;
+}
+
+/*****************************************************************
+//
+//  Function name: operator=
 //
 //  DESCRIPTION:   Allows for using '=' on llist objects.
 //
@@ -46,9 +80,11 @@ char filename[20];
 //
 ****************************************************************/
 
-llist&llist::operator = (const llist& obj)
+llist&llist::operator=(const llist& obj)
 {
-
+    #ifdef DEBUG
+        cout << "Using overriden = operator to assign llist." << endl;
+    #endif
     strcpy(filename, obj.filename);
     start = obj.start;
     return *this;
@@ -68,6 +104,9 @@ llist&llist::operator = (const llist& obj)
 
 llist::llist()
 {
+    #ifdef DEBUG
+        cout << "Called llist (Constructor method)" << endl;
+    #endif
     start = 0;
 }
 
@@ -75,7 +114,7 @@ llist::llist()
 //
 //  Function name: llist()
 //
-//  DESCRIPTION:   Copy constructor method.
+//  DESCRIPTION:   Constructor method.
 //
 //  Parameters:    in (char []) : The filename to read/write to.
 //
@@ -85,6 +124,10 @@ llist::llist()
 
 llist::llist(char in[])
 {
+    #ifdef DEBUG
+        cout << "Called llist (Constructor method)" << endl;
+        cout << "Using filename: " << in << endl;
+    #endif
     strcpy(filename, in);
     start = 0;
     readfile();
@@ -104,6 +147,9 @@ llist::llist(char in[])
 
 llist::llist(const llist &obj) throw()
 {
+    #ifdef DEBUG
+        cout << "Called llist (Copy constructor method)" << endl;
+    #endif
     start = obj.start;
     strcpy(filename, obj.filename);
 }
@@ -123,6 +169,9 @@ llist::llist(const llist &obj) throw()
 
 llist::~llist()
 {
+    #ifdef DEBUG
+        cout << "Called ~llist (Destructor method)" << endl;
+    #endif
     writefile();
     cleanup();
 }
@@ -321,6 +370,9 @@ int llist::deleteRecord(int uaccountno)
 
 int llist::readfile()
 {
+    #ifdef DEBUG
+        cout << "Called readfile." << endl;
+    #endif
     char accountnum[10];
     char name[30];
     char address[50];
@@ -375,6 +427,9 @@ int llist::readfile()
 
 int llist::writefile()
 {
+    #ifdef DEBUG
+        cout << "Called writefile." << endl;
+    #endif
     struct record *current;
     current = start;
     ofstream myfile ("filename.txt");
@@ -412,6 +467,9 @@ int llist::writefile()
 
 void llist::cleanup()
 {
+    #ifdef DEBUG
+        cout << "Called cleanup." << endl;
+    #endif
     struct record *current, *previous;
     current = start;
     while (current != NULL)
