@@ -3,7 +3,7 @@ import java.util.Scanner;
 
 class homework9
 {
-    private static native boolean 
+    private static native int isMultiple5(int num); 
     public static void main(String[] args) 
     {
         Scanner sc = new Scanner(System.in);
