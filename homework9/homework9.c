@@ -1,16 +1,37 @@
 /*****************************************************************
 //
-//  Function name: is_multiple5
+//  NAME:        Kalama Abad
 //
-//  DESCRIPTION:   Calculates whether a number is a multiple of five.               
+//  HOMEWORK:    Homework 9
 //
-//  Parameters:    num, the nubmer to test.
-//                
-//  Return values: 1 if is a multiple of five, 0 if not.
+//  CLASS:       ICS 212
+//
+//  INSTRUCTOR:  Ravi Narayan
+//
+//  DATE:        December 3, 2022
+//
+//  FILE:        homework9.c
+//
+//  DESCRIPTION: This file contains a single c function for seeing if a number is a multiple
+//				 of four.
 //
 ****************************************************************/
 
-int is_multiple5(int num)
+#include "homework9.h"
+
+/*****************************************************************
+//
+//  Function name: isMultiple4
+//
+//  DESCRIPTION:   Checks if a number is a multiple of four.
+//
+//  Parameters:    num (int) : The number to check.
+//                
+//  Return values: 1 if num is a multiple of four, zero if not.
+//
+****************************************************************/
+
+JNIEXPORT jint JNICALL Java_homework9_isMultiple4 (JNIEnv *env, jclass homework9, jint num)
 {
     return (num % 4 == 0) ? 1 : 0;
 }
