@@ -1,0 +1,11 @@
+Create parent class (Pokemon)
+    
+    protected variables
+
+        type (string)
+        weight (float) 
+    
+    constructor
+
+    destructor
+
